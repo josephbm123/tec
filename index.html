@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechPro | Tienda Oficial</title>
+    <title>FullPrintTech</title>
     <style>
         :root { --primary: #2563eb; --dark: #0f172a; --whatsapp: #25d366; --gray: #f8fafc; --danger: #ef4444; }
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--gray); color: #334155; }
@@ -42,8 +42,8 @@
 
 <header>
     <div class="logo-container">
-        <img src="logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
-        <h1 style="margin:0; font-size: 1.2rem;">TECHPRO</h1>
+        <img src="imagenes/logo.jpeg" alt="Logo" class="logo-img" onerror="this.style.display='none'">
+        <h1 style="margin:0; font-size: 1.2rem;">FullPrintTech</h1>
     </div>
     <div class="search-bar"><input type="text" id="buscador" placeholder="🔍 Buscar..." onkeyup="buscarProducto()"></div>
 </header>
@@ -89,16 +89,16 @@
             id: 0, 
             name: 'iPhone 15 Pro Max', 
             price: 1199, 
-            imgDefault: 'iphone-natural.png', 
+            imgDefault: 'imagenes/iphone17t.png', 
             imagenesPorColor: {
-                'Natural': 'iphone-natural.png',
-                'Azul': 'iphone-azul.png',
-                'Negro': 'iphone-negro.png'
+                'Naranja': 'imagenes/iphone17n.png',
+                'Azul': 'imagenes/iphone17a.png',
+                'Silver': 'imagenes/iphone17.png'
             },
             opciones: [
-                'Natural - 256 GB', 'Natural - 512 GB (+ $200)', 'Natural - 1 TB (+ $400)',
+                'Naranja - 256 GB', 'Naranja - 512 GB (+ $200)', 'Naranja - 1 TB (+ $400)',
                 'Azul - 256 GB', 'Azul - 512 GB (+ $200)', 'Azul - 1 TB (+ $400)',
-                'Negro - 256 GB', 'Negro - 512 GB (+ $200)', 'Negro - 1 TB (+ $400)'
+                'Silver - 256 GB', 'Silver - 512 GB (+ $200)', 'Silver - 1 TB (+ $400)'
             ],
             desc: 'Acabado en titanio de grado aeroespacial, el chip A17 Pro y el sistema de cámaras más potente en un iPhone.'
         },
@@ -215,7 +215,7 @@
         carrito.forEach(i => texto += `• ${i.cant}x ${i.nombre} (${i.opcion})%0A`);
         const total = document.getElementById('cart-total').innerText;
         texto += `%0A💰 *TOTAL: $${total}*`;
-        window.open(`https://wa.me/1234567890?text=${texto}`); // CAMBIA EL NUMERO AQUI
+        window.open(`https://wa.me/+584242333194?text=${texto}`); // CAMBIA EL NUMERO AQUI
     }
 
     renderProducts(productos);
@@ -224,4 +224,5 @@
 
 </body>
 </html>
+
 
