@@ -3,105 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FullPrintTech
+    <title>TechPro | Tienda Oficial</title>
     <style>
         :root { --primary: #2563eb; --dark: #0f172a; --whatsapp: #25d366; --gray: #f8fafc; --danger: #ef4444; }
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--gray); color: #334155; }
         
-        /* HEADER CON LOGO */
-        header { 
-            background: var(--dark); 
-            color: white; 
-            padding: 1rem 5%; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            position: sticky; 
-            top: 0; 
-            z-index: 1000; 
-        }
+        header { background: var(--dark); color: white; padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; }
         .logo-container { display: flex; align-items: center; gap: 12px; }
-        .logo-img { height: 45px; width: auto; object-fit: contain; }
-        header h1 { margin: 0; font-size: 1.4rem; letter-spacing: 1px; }
-
-        .search-bar input { padding: 10px 15px; border-radius: 20px; border: none; outline: none; width: 200px; }
+        .logo-img { height: 40px; width: auto; object-fit: contain; }
+        .search-bar input { padding: 10px 15px; border-radius: 20px; border: none; outline: none; width: 180px; }
 
         .container { max-width: 1200px; margin: 2rem auto; padding: 0 20px; display: grid; grid-template-columns: 1fr 350px; gap: 2rem; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; }
         
-        /* GRILLA DE PRODUCTOS */
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
-        .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; transition: 0.3s; text-align: center; }
-        .card:hover { transform: translateY(-5px); border-color: var(--primary); }
-        .card img { width: 100%; height: 200px; object-fit: contain; cursor: pointer; padding-top: 10px; }
-        .card-info { padding: 1.2rem; }
-        
-        .price { font-size: 1.5rem; font-weight: 800; color: var(--primary); margin: 10px 0; }
-        .add-btn { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; }
+        .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; text-align: center; padding-bottom: 15px; }
+        .card img { width: 100%; height: 180px; object-fit: contain; cursor: pointer; padding-top: 10px; }
+        .price { font-size: 1.4rem; font-weight: 800; color: var(--primary); margin: 10px 0; }
+        .add-btn { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 80%; }
 
         /* MODAL */
-        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-        .modal-content { background: white; padding: 2rem; border-radius: 20px; max-width: 450px; width: 90%; position: relative; }
-        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 1.8rem; cursor: pointer; color: #94a3b8; }
-        .modal img { width: 100%; max-height: 250px; object-fit: contain; margin-bottom: 15px; transition: 0.3s; }
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); align-items: center; justify-content: center; }
+        .modal-content { background: white; padding: 20px; border-radius: 15px; max-width: 400px; width: 90%; position: relative; }
+        .close-modal { position: absolute; top: 10px; right: 15px; font-size: 1.5rem; cursor: pointer; }
+        #modalImg { width: 100%; max-height: 200px; object-fit: contain; }
         
         .selector-group { margin: 15px 0; text-align: left; }
-        .selector-group label { display: block; font-weight: bold; margin-bottom: 6px; font-size: 0.9rem; }
-        select, .qty-input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 1rem; outline: none; }
+        select, input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; margin-top: 5px; }
 
         /* CARRITO */
-        .cart-panel { background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 10px 15px rgba(0,0,0,0.1); height: fit-content; position: sticky; top: 100px; }
-        .cart-item { padding: 12px 0; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: flex-start; }
-        .btn-del { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 1.3rem; }
-        .whatsapp-btn { background: var(--whatsapp); color: white; text-decoration: none; display: block; text-align: center; padding: 16px; border-radius: 8px; font-weight: bold; margin-top: 1rem; }
+        .cart-panel { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); height: fit-content; }
+        .cart-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+        .whatsapp-btn { background: var(--whatsapp); color: white; text-decoration: none; display: block; text-align: center; padding: 15px; border-radius: 8px; font-weight: bold; margin-top: 10px; }
 
-        @media (max-width: 900px) { .container { grid-template-columns: 1fr; } .cart-panel { position: static; } }
+        @media (max-width: 900px) { .container { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
 <header>
     <div class="logo-container">
-        <img src="imagenes/logo.jpeg" alt="Logo" class="logo-img" onerror="this.style.display='none'">
-        <h1>FullPrintTech
+        <img src="logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
+        <h1 style="margin:0; font-size: 1.2rem;">TECHPRO</h1>
     </div>
-    <div class="search-bar"><input type="text" id="buscador" placeholder="🔍 Buscar producto..." onkeyup="buscarProducto()"></div>
-    <div style="font-weight: bold;">🛒 <span id="cart-count">0</span></div>
+    <div class="search-bar"><input type="text" id="buscador" placeholder="🔍 Buscar..." onkeyup="buscarProducto()"></div>
 </header>
 
 <div class="container">
-    <main class="products-grid" id="products-container"></main>
+    <div class="products-grid" id="products-container"></div>
 
-    <aside class="cart-panel">
-        <h3 style="margin-top:0; border-bottom: 2px solid #eee; padding-bottom: 10px;">Tu Carrito</h3>
+    <div class="cart-panel">
+        <h3>🛒 Carrito (<span id="cart-count">0</span>)</h3>
         <div id="cart-items"></div>
-        <div id="cart-summary" style="display: none;">
-            <div style="font-size: 1.5rem; font-weight: 800; margin: 1.5rem 0; text-align: right;">Total: $<span id="cart-total">0</span></div>
-            <a href="#" class="whatsapp-btn" onclick="enviarWhatsApp()">📱 Pedir por WhatsApp</a>
-            <button style="background:none; border:none; color:var(--danger); cursor:pointer; width:100%; margin-top:10px;" onclick="vaciarCarrito()">Vaciar Carrito</button>
+        <div id="cart-summary" style="display:none">
+            <h4 style="text-align:right">Total: $<span id="cart-total">0</span></h4>
+            <button class="whatsapp-btn" style="width:100%; border:none" onclick="enviarWhatsApp()">Enviar Pedido</button>
+            <button onclick="vaciarCarrito()" style="background:none; border:none; color:red; cursor:pointer; width:100%; margin-top:10px">Vaciar</button>
         </div>
-        <div id="cart-empty-msg" style="text-align: center; color: #94a3b8; padding: 30px;">Tu carrito está vacío.</div>
-    </aside>
+    </div>
 </div>
 
 <div id="miModal" class="modal">
     <div class="modal-content">
         <span class="close-modal" onclick="cerrarModal()">&times;</span>
         <img id="modalImg" src="">
-        <h2 id="modalTitle" style="margin:0;"></h2>
-        <p id="modalDesc" style="font-size: 0.9rem; color: #64748b; margin: 10px 0;"></p>
+        <h2 id="modalTitle" style="margin:10px 0 5px 0"></h2>
+        <p id="modalDesc" style="color:#666; font-size:0.9rem; margin-bottom:15px"></p>
         
         <div class="selector-group">
-            <label id="labelVariante">Opciones:</label>
+            <label id="labelVariante">Opción:</label>
             <select id="selectVariante" onchange="actualizarImagenModal()"></select>
         </div>
 
         <div class="selector-group">
             <label>Cantidad:</label>
-            <input type="number" id="modalQty" class="qty-input" value="1" min="1">
+            <input type="number" id="modalQty" value="1" min="1">
         </div>
 
-        <p class="price" id="modalPrice"></p>
-        <button class="add-btn" id="modalAddBtn">Añadir al Carrito</button>
+        <button class="add-btn" id="modalAddBtn" style="width:100%">Agregar al carrito</button>
     </div>
 </div>
 
@@ -109,163 +87,140 @@
     const productos = [
         { 
             id: 0, 
-            name: 'iPhone 17 Pro Max', 
-            desc: 'Pantalla Super Retina XDR y Chip A17 Pro.',
+            name: 'iPhone 15 Pro Max', 
             price: 1199, 
-            imgDefault: 'imagenes/iphone17t.png', 
-            tipoVariante: 'Color y Capacidad',
-            // MAPA DE IMÁGENES: La clave debe coincidir con el inicio de la opción
+            imgDefault: 'iphone-natural.png', 
             imagenesPorColor: {
-                'Naranja': 'imagenes/iphone17n.jpg',
-                'Azul': 'imagenes/iphone17a.jpg',
-                'Silver': 'imagenes/iphone17.jpg'
+                'Natural': 'iphone-natural.png',
+                'Azul': 'iphone-azul.png',
+                'Negro': 'iphone-negro.png'
             },
             opciones: [
                 'Natural - 256 GB', 'Natural - 512 GB (+ $200)', 'Natural - 1 TB (+ $400)',
                 'Azul - 256 GB', 'Azul - 512 GB (+ $200)', 'Azul - 1 TB (+ $400)',
                 'Negro - 256 GB', 'Negro - 512 GB (+ $200)', 'Negro - 1 TB (+ $400)'
             ],
-            desc: 'Acabado en titanio de grado aeroespacial, el chip A17 Pro y el sistema de cámaras más potente en un iPhone.'
+            desc: 'Acabado en titanio y chip A17 Pro.'
         },
         { 
             id: 1, 
             name: 'PC Gaming RTX 4080', 
             price: 2450, 
             imgDefault: 'pc.jpg', 
-            tipoVariante: 'Almacenamiento',
-            opciones: ['1TB SSD', '2TB SSD (+ $150)', '4TB SSD (+ $300)'],
-            desc: 'Rendimiento extremo para juegos 4K y edición de video profesional.'
+            opciones: ['1TB SSD', '2TB SSD (+ $150)'],
+            desc: 'Potencia máxima para gaming.'
         },
         { 
             id: 2, 
             name: 'Tóner Láser Especial', 
             price: 65, 
             imgDefault: 'toner.jpg', 
-            tipoVariante: 'Color',
-            opciones: ['Negro', 'Cian', 'Magenta', 'Amarillo', 'PACK COMPLETO (+ $180)'],
-            desc: 'Tóner original de alta precisión. El Pack incluye los 4 colores (CMYK).'
+            opciones: ['Negro', 'Cian', 'Magenta', 'Amarillo', 'Pack Completo (+ $180)'],
+            desc: 'Calidad profesional de impresión.'
         }
     ];
 
-    let cart = [];
-    let total = 0;
-    let productoActualId = null;
-    const miTelefono = "1234567890"; // Reemplaza con tu número
+    let carrito = [];
+    let idProductoAbierto = null;
 
-    function renderProducts(items) {
-        document.getElementById('products-container').innerHTML = items.map(p => `
+    function renderProducts(lista) {
+        const html = lista.map(p => `
             <div class="card">
-                <img src="${p.imgDefault}" onclick="abrirDetalles(${p.id})" onerror="this.src='https://via.placeholder.com/200?text=Error+Imagen'">
-                <div class="card-info">
-                    <h3>${p.name}</h3>
-                    <p class="price">$${p.price}</p>
-                    <button class="add-btn" onclick="abrirDetalles(${p.id})">Configurar</button>
-                </div>
+                <img src="${p.imgDefault}" onclick="abrirModal(${p.id})">
+                <h3>${p.name}</h3>
+                <p class="price">$${p.price}</p>
+                <button class="add-btn" onclick="abrirModal(${p.id})">Configurar</button>
             </div>
         `).join('');
+        document.getElementById('products-container').innerHTML = html;
     }
 
-    function abrirDetalles(id) {
+    function abrirModal(id) {
         const p = productos.find(x => x.id === id);
-        productoActualId = id;
-        
-        // CORRECCIÓN: Aquí se asigna la descripción
-        document.getElementById('modalDesc').innerText = p.desc;
-        
-        document.getElementById('modalImg').src = p.imgDefault;
+        idProductoAbierto = id;
         document.getElementById('modalTitle').innerText = p.name;
-        document.getElementById('modalQty').value = 1;
-        document.getElementById('labelVariante').innerText = 'Seleccionar ' + p.tipoVariante + ':';
+        document.getElementById('modalDesc').innerText = p.desc;
+        document.getElementById('modalImg').src = p.imgDefault;
         
         const select = document.getElementById('selectVariante');
         select.innerHTML = p.opciones.map(o => `<option value="${o}">${o}</option>`).join('');
-
-        actualizarImagenModal(); 
-
+        
+        actualizarImagenModal();
+        
         document.getElementById('modalAddBtn').onclick = () => {
-            addToCart(p.name, p.price, p.tipoVariante, select.value, parseInt(document.getElementById('modalQty').value) || 1);
+            agregarAlCarrito(p.name, p.price, select.value, parseInt(document.getElementById('modalQty').value));
             cerrarModal();
         };
-        document.getElementById('miModal').style.display = "flex";
+        
+        document.getElementById('miModal').style.display = 'flex';
     }
 
     function actualizarImagenModal() {
-        const p = productos.find(x => x.id === productoActualId);
+        const p = productos.find(x => x.id === idProductoAbierto);
         const seleccion = document.getElementById('selectVariante').value;
-        const imgElement = document.getElementById('modalImg');
-
         if (p.imagenesPorColor) {
             for (let color in p.imagenesPorColor) {
                 if (seleccion.startsWith(color)) {
-                    imgElement.src = p.imagenesPorColor[color];
+                    document.getElementById('modalImg').src = p.imagenesPorColor[color];
                     break;
                 }
             }
         }
     }
 
-    function cerrarModal() { document.getElementById('miModal').style.display = "none"; }
+    function cerrarModal() { document.getElementById('miModal').style.display = 'none'; }
 
-    function addToCart(name, price, tipoVar, opcion, qty) {
-        let precioBase = price;
-        if(opcion.includes('+ $')) precioBase += parseInt(opcion.split('$')[1]);
-        const subtotal = precioBase * qty;
-        cart.push({ id: Date.now(), name, price: subtotal, detalle: `${tipoVar}: ${opcion}`, qty });
-        total += subtotal;
-        updateUI();
+    function agregarAlCarrito(nombre, precio, opcion, cant) {
+        let precioFinal = precio;
+        if(opcion.includes('+ $')) {
+            precioFinal += parseInt(opcion.split('$')[1]);
+        }
+        carrito.push({ nombre, opcion, cant, subtotal: precioFinal * cant });
+        actualizarCarritoUI();
     }
 
-    function eliminarProducto(id) {
-        const index = cart.findIndex(item => item.id === id);
-        total -= cart[index].price;
-        cart.splice(index, 1);
-        updateUI();
+    function actualizarCarritoUI() {
+        const lista = document.getElementById('cart-items');
+        let total = 0;
+        lista.innerHTML = carrito.map((item, index) => {
+            total += item.subtotal;
+            return `<div class="cart-item">
+                <div>${item.cant}x ${item.nombre}<br><small>${item.opcion}</small></div>
+                <div>$${item.subtotal} <button onclick="borrarItem(${index})" style="border:none; background:none; color:red; cursor:pointer">×</button></div>
+            </div>`;
+        }).join('');
+        
+        document.getElementById('cart-total').innerText = total;
+        document.getElementById('cart-count').innerText = carrito.length;
+        document.getElementById('cart-summary').style.display = carrito.length > 0 ? 'block' : 'none';
+    }
+
+    function borrarItem(index) {
+        carrito.splice(index, 1);
+        actualizarCarritoUI();
     }
 
     function vaciarCarrito() {
-        if(confirm("¿Vaciar todo el carrito?")) { cart = []; total = 0; updateUI(); }
-    }
-
-    function updateUI() {
-        const list = document.getElementById('cart-items');
-        document.getElementById('cart-summary').style.display = cart.length ? "block" : "none";
-        document.getElementById('cart-empty-msg').style.display = cart.length ? "none" : "block";
-        
-        list.innerHTML = cart.map(i => `
-            <div class="cart-item">
-                <div class="cart-item-info">
-                    <strong>${i.qty}x ${i.name}</strong>
-                    <small>${i.detalle}</small>
-                    <div style="font-weight:bold; color:var(--primary);">$${i.price.toLocaleString()}</div>
-                </div>
-                <button class="btn-del" onclick="eliminarProducto(${i.id})">×</button>
-            </div>
-        `).join('');
-        document.getElementById('cart-total').innerText = total.toLocaleString();
-        document.getElementById('cart-count').innerText = cart.length;
+        carrito = [];
+        actualizarCarritoUI();
     }
 
     function buscarProducto() {
-        const q = document.getElementById('buscador').value.toLowerCase();
-        renderProducts(productos.filter(p => p.name.toLowerCase().includes(q)));
+        const texto = document.getElementById('buscador').value.toLowerCase();
+        renderProducts(productos.filter(p => p.name.toLowerCase().includes(texto)));
     }
 
     function enviarWhatsApp() {
-        if (cart.length === 0) return;
-        let msg = "🛒 *NUEVO PEDIDO TECHPRO*%0A%0A";
-        cart.forEach(i => msg += `✅ *${i.qty}x ${i.name}*%0A   ${i.detalle}%0A   Subtotal: $${i.price}%0A%0A`);
-        msg += `💰 *TOTAL: $${total}*`;
-        window.open(`https://wa.me/${miTelefono}?text=${msg}`, '_blank');
+        let texto = "🛒 *NUEVO PEDIDO*%0A%0A";
+        carrito.forEach(i => texto += `• ${i.cant}x ${i.nombre} (${i.opcion})%0A`);
+        const total = document.getElementById('cart-total').innerText;
+        texto += `%0A💰 *TOTAL: $${total}*`;
+        window.open(`https://wa.me/1234567890?text=${texto}`); // CAMBIA EL NUMERO AQUI
     }
 
     renderProducts(productos);
     window.onclick = (e) => { if(e.target == document.getElementById('miModal')) cerrarModal(); };
 </script>
+
 </body>
 </html>
-
-
-
-
-
-
