@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FullPrintTech</title>
+    
+    <link rel="icon" href="imagenes/logo.jpeg" type="image/jpeg">
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         :root { --primary: #2563eb; --dark: #0f172a; --whatsapp: #25d366; --gray: #f8fafc; --danger: #ef4444; }
@@ -45,7 +48,7 @@
 
 <header>
     <div class="logo-container">
-        <img src="REEMPLAZA_CON_TU_RUTA_DE_LOGO.jpg" alt="Logo" class="logo-img" id="imgLogoHeader" onerror="this.style.display='none'">
+        <img src="imagenes/logo.jpeg" alt="Logo" class="logo-img" id="imgLogoHeader" onerror="this.style.display='none'">
         <h1 style="margin:0; font-size: 1.2rem;">FullPrintTech</h1>
     </div>
     <div class="search-bar"><input type="text" id="buscador" placeholder="🔍 Buscar..." onkeyup="buscarProducto()"></div>
@@ -176,7 +179,7 @@
         const select = document.getElementById('selectVariante');
         select.innerHTML = p.opciones.map(o => `<option value="${o}">${o}</option>`).join('');
         
-        actualizarImagenModal(); // Cargar imagen inicial según la primera opción
+        actualizarImagenModal(); 
         
         document.getElementById('modalAddBtn').onclick = () => {
             agregarAlCarrito(p.name, p.price, select.value, parseInt(document.getElementById('modalQty').value));
@@ -189,7 +192,6 @@
         const p = productos.find(x => x.id === idProductoAbierto);
         const seleccion = document.getElementById('selectVariante').value;
         
-        // Lógica de cambio de imagen por color
         if (p.imagenesPorColor) {
             for (let colorKey in p.imagenesPorColor) {
                 if (seleccion.includes(colorKey)) {
@@ -275,12 +277,3 @@
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
