@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FullPrintTech</title>
+    <title>FullPrintTech | Cotizador</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         :root { --primary: #2563eb; --dark: #0f172a; --whatsapp: #25d366; --gray: #f8fafc; --danger: #ef4444; }
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--gray); color: #334155; }
@@ -21,19 +22,21 @@
         .price { font-size: 1.4rem; font-weight: 800; color: var(--primary); margin: 10px 0; }
         .add-btn { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 80%; }
 
+        .cart-panel { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); height: fit-content; position: sticky; top: 80px; }
+        .cart-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+        .btn-action { display: block; width: 100%; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none; margin-top: 10px; text-decoration: none; font-size: 0.9rem; color: white; text-align: center; }
+        .whatsapp-btn { background: var(--whatsapp); }
+        .pdf-btn { background: var(--danger); }
+        .folio-tag { background: #eee; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; }
+
         /* MODAL */
         .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); align-items: center; justify-content: center; }
         .modal-content { background: white; padding: 20px; border-radius: 15px; max-width: 400px; width: 90%; position: relative; }
         .close-modal { position: absolute; top: 10px; right: 15px; font-size: 1.5rem; cursor: pointer; }
-        #modalImg { width: 100%; max-height: 200px; object-fit: contain; }
+        #modalImg { width: 100%; max-height: 200px; object-fit: contain; border-radius: 8px; }
         
         .selector-group { margin: 15px 0; text-align: left; }
-        select, input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; margin-top: 5px; }
-
-        /* CARRITO */
-        .cart-panel { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); height: fit-content; }
-        .cart-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; font-size: 0.9rem; }
-        .whatsapp-btn { background: var(--whatsapp); color: white; text-decoration: none; display: block; text-align: center; padding: 15px; border-radius: 8px; font-weight: bold; margin-top: 10px; }
+        select, input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; margin-top: 5px; box-sizing: border-box; }
 
         @media (max-width: 900px) { .container { grid-template-columns: 1fr; } }
     </style>
@@ -42,7 +45,7 @@
 
 <header>
     <div class="logo-container">
-        <img src="imagenes/logo.jpeg" alt="Logo" class="logo-img" onerror="this.style.display='none'">
+        <img src="REEMPLAZA_CON_TU_RUTA_DE_LOGO.jpg" alt="Logo" class="logo-img" id="imgLogoHeader" onerror="this.style.display='none'">
         <h1 style="margin:0; font-size: 1.2rem;">FullPrintTech</h1>
     </div>
     <div class="search-bar"><input type="text" id="buscador" placeholder="🔍 Buscar..." onkeyup="buscarProducto()"></div>
@@ -52,12 +55,23 @@
     <div class="products-grid" id="products-container"></div>
 
     <div class="cart-panel">
-        <h3>🛒 Carrito (<span id="cart-count">0</span>)</h3>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;">
+            <h3 style="margin:0">🛒 Carrito (<span id="cart-count">0</span>)</h3>
+            <span class="folio-tag">Cotización: #<span id="nro-cotizacion">0069</span></span>
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label style="font-size: 0.8rem; font-weight: bold;">Cliente:</label>
+            <input type="text" id="inputCliente" placeholder="Nombre del cliente">
+        </div>
+
         <div id="cart-items"></div>
+
         <div id="cart-summary" style="display:none">
             <h4 style="text-align:right">Total: $<span id="cart-total">0</span></h4>
-            <button class="whatsapp-btn" style="width:100%; border:none" onclick="enviarWhatsApp()">Enviar Pedido</button>
-            <button onclick="vaciarCarrito()" style="background:none; border:none; color:red; cursor:pointer; width:100%; margin-top:10px">Vaciar</button>
+            <button class="btn-action whatsapp-btn" onclick="enviarWhatsApp()">Enviar WhatsApp</button>
+            <button class="btn-action pdf-btn" onclick="generarPDF()">Descargar PDF</button>
+            <button onclick="vaciarCarrito()" style="background:none; border:none; color:red; cursor:pointer; width:100%; margin-top:10px; font-size:0.8rem">Vaciar</button>
         </div>
     </div>
 </div>
@@ -70,12 +84,12 @@
         <p id="modalDesc" style="color:#666; font-size:0.9rem; margin-bottom:15px"></p>
         
         <div class="selector-group">
-            <label id="labelVariante">Opción:</label>
+            <label>Selecciona Opción (Color/Capacidad):</label>
             <select id="selectVariante" onchange="actualizarImagenModal()"></select>
         </div>
 
         <div class="selector-group">
-            <label>Elegir:</label>
+            <label>Cantidad:</label>
             <input type="number" id="modalQty" value="1" min="1">
         </div>
 
@@ -84,6 +98,14 @@
 </div>
 
 <script>
+    // ==========================================
+    // 1. CONFIGURACIÓN DE RUTA DEL LOGO
+    // ==========================================
+    const RUTA_LOGO = "imagenes/logo.jpeg"; 
+    // ==========================================
+
+    document.getElementById('imgLogoHeader').src = RUTA_LOGO;
+
     const productos = [
         { 
             id: 0, 
@@ -100,7 +122,7 @@
                 'Azul - 256 GB', 'Azul - 512 GB (+ $200)', 'Azul - 1 TB (+ $400)',
                 'Silver - 256 GB', 'Silver - 512 GB (+ $200)', 'Silver - 1 TB (+ $400)'
             ],
-            desc: 'Acabado en titanio de grado aeroespacial, el chip A17 Pro y el sistema de cámaras más potente en un iPhone.'
+            desc: 'Titanio aeroespacial y chip A17 Pro.'
         },
         { 
             id: 1, 
@@ -115,16 +137,26 @@
             name: 'Toner HP 85a', 
             price: 65, 
             imgDefault: 'toner.jpg', 
-            opciones: ['Negro', 'Cian', 'Magenta', 'Amarillo', 'Pack Completo (+ $180)'],
-            desc: 'Calidad profesional de impresión, con capacidad de 1.600 impresiones aproximadamente.'
+            opciones: ['Negro', 'Pack Completo (+ $180)'],
+            desc: 'Calidad profesional de impresión.'
         }
     ];
 
     let carrito = [];
     let idProductoAbierto = null;
 
+    window.onload = () => {
+        if (!localStorage.getItem('folio_fpt')) localStorage.setItem('folio_fpt', '69');
+        actualizarFolioUI();
+        renderProducts(productos);
+    };
+
+    function actualizarFolioUI() {
+        document.getElementById('nro-cotizacion').innerText = localStorage.getItem('folio_fpt').padStart(4, '0');
+    }
+
     function renderProducts(lista) {
-        const html = lista.map(p => `
+        document.getElementById('products-container').innerHTML = lista.map(p => `
             <div class="card">
                 <img src="${p.imgDefault}" onclick="abrirModal(${p.id})">
                 <h3>${p.name}</h3>
@@ -132,7 +164,6 @@
                 <button class="add-btn" onclick="abrirModal(${p.id})">Seleccionar</button>
             </div>
         `).join('');
-        document.getElementById('products-container').innerHTML = html;
     }
 
     function abrirModal(id) {
@@ -145,90 +176,105 @@
         const select = document.getElementById('selectVariante');
         select.innerHTML = p.opciones.map(o => `<option value="${o}">${o}</option>`).join('');
         
-        actualizarImagenModal();
+        actualizarImagenModal(); // Cargar imagen inicial según la primera opción
         
         document.getElementById('modalAddBtn').onclick = () => {
             agregarAlCarrito(p.name, p.price, select.value, parseInt(document.getElementById('modalQty').value));
             cerrarModal();
         };
-        
         document.getElementById('miModal').style.display = 'flex';
     }
 
     function actualizarImagenModal() {
         const p = productos.find(x => x.id === idProductoAbierto);
         const seleccion = document.getElementById('selectVariante').value;
+        
+        // Lógica de cambio de imagen por color
         if (p.imagenesPorColor) {
-            for (let color in p.imagenesPorColor) {
-                if (seleccion.startsWith(color)) {
-                    document.getElementById('modalImg').src = p.imagenesPorColor[color];
-                    break;
+            for (let colorKey in p.imagenesPorColor) {
+                if (seleccion.includes(colorKey)) {
+                    document.getElementById('modalImg').src = p.imagenesPorColor[colorKey];
+                    return;
                 }
             }
         }
+        document.getElementById('modalImg').src = p.imgDefault;
     }
 
     function cerrarModal() { document.getElementById('miModal').style.display = 'none'; }
 
     function agregarAlCarrito(nombre, precio, opcion, cant) {
         let precioFinal = precio;
-        if(opcion.includes('+ $')) {
-            precioFinal += parseInt(opcion.split('$')[1]);
-        }
+        if(opcion.includes('+ $')) precioFinal += parseInt(opcion.split('$')[1]);
         carrito.push({ nombre, opcion, cant, subtotal: precioFinal * cant });
         actualizarCarritoUI();
     }
 
     function actualizarCarritoUI() {
-        const lista = document.getElementById('cart-items');
         let total = 0;
-        lista.innerHTML = carrito.map((item, index) => {
+        document.getElementById('cart-items').innerHTML = carrito.map((item, index) => {
             total += item.subtotal;
             return `<div class="cart-item">
                 <div>${item.cant}x ${item.nombre}<br><small>${item.opcion}</small></div>
                 <div>$${item.subtotal} <button onclick="borrarItem(${index})" style="border:none; background:none; color:red; cursor:pointer">×</button></div>
             </div>`;
         }).join('');
-        
         document.getElementById('cart-total').innerText = total;
         document.getElementById('cart-count').innerText = carrito.length;
         document.getElementById('cart-summary').style.display = carrito.length > 0 ? 'block' : 'none';
     }
 
-    function borrarItem(index) {
-        carrito.splice(index, 1);
-        actualizarCarritoUI();
-    }
-
-    function vaciarCarrito() {
-        carrito = [];
-        actualizarCarritoUI();
-    }
+    function borrarItem(index) { carrito.splice(index, 1); actualizarCarritoUI(); }
+    function vaciarCarrito() { carrito = []; actualizarCarritoUI(); }
 
     function buscarProducto() {
         const texto = document.getElementById('buscador').value.toLowerCase();
         renderProducts(productos.filter(p => p.name.toLowerCase().includes(texto)));
     }
 
-    function enviarWhatsApp() {
-        let texto = "🛒 *NUEVO PEDIDO*%0A%0A";
-        carrito.forEach(i => texto += `• ${i.cant}x ${i.nombre} (${i.opcion})%0A`);
-        const total = document.getElementById('cart-total').innerText;
-        texto += `%0A💰 *TOTAL: $${total}*`;
-        window.open(`https://wa.me/+584242333194?text=${texto}`); // CAMBIA EL NUMERO AQUI
+    async function generarPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        const logoImg = document.getElementById('imgLogoHeader');
+
+        try { doc.addImage(logoImg, 'JPEG', 15, 10, 20, 15); } catch(e){}
+
+        doc.setFontSize(20); doc.setFont("helvetica", "bold");
+        doc.text("FullPrintTech", 38, 21);
+        
+        doc.setFontSize(10); doc.text(`COTIZACIÓN N°: ${document.getElementById('nro-cotizacion').innerText}`, 155, 21);
+        doc.line(15, 30, 195, 30);
+
+        doc.setFontSize(11); doc.setFont("helvetica", "normal");
+        doc.text(`Cliente: ${document.getElementById('inputCliente').value || "General"}`, 15, 40);
+        doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 15, 46);
+
+        let y = 60;
+        carrito.forEach(item => {
+            doc.text(`${item.cant}x ${item.nombre} (${item.opcion})`, 15, y);
+            doc.text(`$${item.subtotal}`, 170, y);
+            y += 8;
+        });
+
+        doc.setFontSize(14); doc.setFont("helvetica", "bold");
+        doc.text(`TOTAL: $${document.getElementById('cart-total').innerText}`, 145, y + 10);
+        
+        doc.save(`FullPrintTech_Cot.pdf`);
+        localStorage.setItem('folio_fpt', parseInt(localStorage.getItem('folio_fpt')) + 1);
+        actualizarFolioUI();
     }
 
-    renderProducts(productos);
-    window.onclick = (e) => { if(e.target == document.getElementById('miModal')) cerrarModal(); };
-</script>
+    function enviarWhatsApp() {
+        let texto = "🛒 *PEDIDO FullPrintTech*%0ACliente: " + document.getElementById('inputCliente').value + "%0A%0A";
+        carrito.forEach(i => texto += `• ${i.cant}x ${i.nombre} (${i.opcion})%0A`);
+        texto += `%0A💰 *TOTAL: $${document.getElementById('cart-total').innerText}*`;
+        window.open(`https://wa.me/+584242333194?text=${texto}`);
+    }
 
+    window.onclick = (e) => { if(e.target.className == 'modal') cerrarModal(); };
+</script>
 </body>
 </html>
-
-
-
-
-
 
 
 
