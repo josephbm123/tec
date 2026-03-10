@@ -128,6 +128,16 @@
         .contact-label { color: var(--text-secondary); font-size: 13px; text-transform: uppercase; display: block; margin-bottom: 5px; }
         .contact-link { text-decoration: none; color: var(--accent-blue); font-weight: 600; }
 
+        /* --- FOOTER (NUEVO) --- */
+        footer {
+            background: var(--apple-gray);
+            padding: 30px 25px;
+            text-align: center;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
         /* --- MODAL --- */
         .modal { display: none; position: fixed; z-index: 4000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; }
         .modal-content { background: white; padding: 40px; border-radius: 30px; width: 90%; max-width: 420px; text-align: center; position: relative; }
@@ -219,6 +229,10 @@
         </div>
     </div>
 </section>
+
+<footer>
+    <p>© 2026 FullPrintTech. Todos los derechos reservados.</p>
+</footer>
 
 <div id="miModal" class="modal">
     <div class="modal-content">
@@ -408,21 +422,17 @@
         document.getElementById('modalPriceLabel').innerText = `${total.toLocaleString()} $`;
     }
 
-    // --- FUNCIÓN DE CERRAR ACTUALIZADA ---
     function cerrarModal() { 
         document.getElementById('miModal').style.display = 'none'; 
     }
 
-    // EVENTO PARA CERRAR AL TOCAR AFUERA (ZONA EN BLANCO)
     const modalGeneral = document.getElementById('miModal');
     modalGeneral.addEventListener('click', (e) => {
-        // Si el clic es directamente en el fondo oscuro (miModal)
         if (e.target === modalGeneral) {
             cerrarModal();
         }
     });
 
-    // Opcional: Cerrar con la tecla Escape
     window.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') cerrarModal();
     });
