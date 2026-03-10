@@ -79,7 +79,7 @@
         .cart-panel { background: white; padding: 30px; border-radius: 24px; border: 1px solid #eee; height: fit-content; position: sticky; top: 140px; }
         .input-cliente { width: 100%; padding: 14px; margin-bottom: 20px; border-radius: 12px; border: 1px solid #eee; background: var(--apple-gray); outline: none; }
 
-        /* --- BOTONES FLOTANTES Y IA --- */
+        /* --- BOTONES FLOTANTES --- */
         .floating-container {
             position: fixed; bottom: 30px; right: 30px;
             display: flex; flex-direction: column; gap: 15px; z-index: 5000;
@@ -89,24 +89,19 @@
             display: flex; align-items: center; justify-content: center;
             color: white; border: none; cursor: pointer;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: 0.3s;
+            position: relative;
         }
         .floating-btn:hover { transform: scale(1.1); }
-        .btn-ai-float { background: var(--apple-black); }
         .btn-wa-float { background: var(--whatsapp-green); }
+        .btn-cart-float { background: var(--accent-blue); }
 
-        #ai-window {
-            display: none; position: fixed; bottom: 110px; right: 30px;
-            width: 320px; height: 400px; background: white;
-            border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            z-index: 5001; flex-direction: column; overflow: hidden;
-            border: 1px solid #eee;
+        .cart-count-badge {
+            position: absolute; top: 0; right: 0;
+            background: red; color: white; border-radius: 50%;
+            width: 22px; height: 22px; font-size: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; border: 2px solid white;
         }
-        .ai-header { background: var(--apple-black); color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .ai-messages { flex: 1; padding: 15px; overflow-y: auto; background: #f9f9f9; display: flex; flex-direction: column; gap: 10px; font-size: 14px; }
-        .ai-input-area { padding: 10px; border-top: 1px solid #eee; display: flex; gap: 5px; }
-        .ai-msg { padding: 10px; border-radius: 15px; max-width: 80%; line-height: 1.4; }
-        .ai-msg-bot { background: #e9e9eb; align-self: flex-start; }
-        .ai-msg-user { background: var(--accent-blue); color: white; align-self: flex-end; }
 
         /* --- SECCIÓN CONTACTO --- */
         .contact-section {
@@ -155,26 +150,17 @@
 </div>
 
 <div class="floating-container">
-    <button class="floating-btn btn-ai-float" onclick="toggleAIChat()">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+    <button class="floating-btn btn-cart-float" onclick="irAlCarrito()" title="Ver Carrito">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        </svg>
+        <span id="cart-badge" class="cart-count-badge" style="display:none;">0</span>
     </button>
-    <a href="https://wa.me/584242333194" target="_blank" class="floating-btn btn-wa-float">
+    <a href="https://wa.me/584242333194" target="_blank" class="floating-btn btn-wa-float" title="WhatsApp">
         <svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.937 3.659 1.432 5.631 1.433h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
     </a>
-</div>
-
-<div id="ai-window">
-    <div class="ai-header">
-        <span style="font-weight:600;">Asistente FullPrintTech</span>
-        <span onclick="toggleAIChat()" style="cursor:pointer; font-size:20px;">×</span>
-    </div>
-    <div id="ai-msg-container" class="ai-messages">
-        <div class="ai-msg ai-msg-bot">¡Hola! Soy tu asistente virtual. ¿En qué puedo ayudarte? Pregúntame por iPhones, laptops o precios.</div>
-    </div>
-    <div class="ai-input-area">
-        <input type="text" id="ai-input-field" style="flex:1; padding:8px; border-radius:10px; border:1px solid #ddd; outline:none;" placeholder="Escribe un mensaje..." onkeypress="if(event.key==='Enter') sendAIMessage()">
-        <button onclick="sendAIMessage()" style="background:var(--accent-blue); color:white; border:none; border-radius:10px; padding:0 12px; cursor:pointer;">↑</button>
-    </div>
 </div>
 
 <header class="hero">
@@ -184,7 +170,7 @@
 
 <div class="main-content">
     <div class="products-grid" id="products-container"></div>
-    <div class="cart-panel">
+    <div class="cart-panel" id="carrito-ancla">
         <span style="font-size: 11px; color: var(--text-secondary); font-weight: 700;">COTIZACIÓN #<span id="nro-cotizacion">1001</span></span>
         <h3>Tu Cotización</h3>
         <input type="text" id="inputCliente" class="input-cliente" placeholder="Nombre del cliente o empresa">
@@ -232,141 +218,30 @@
 
 <script>
     const productos = [
-        { 
-            id: 0, categoria: 'iPhone', name: 'iPhone 17 Pro Max', 
-            descripcion: "Titanio de grado aeroespacial y el nuevo chip A19 Pro.",
-            price: 2190, imgDefault: 'imagenes/iphone17t.png', 
-            esIphone: true,
-            capacidades: [{lab:'256GB', extra:0}, {lab:'512GB', extra:300}, {lab:'1TB', extra:600}, {lab:'2TB', extra:1200}],
-            colores: ['Naranja Cosmico', 'Silver', 'Azul Profundo']
-        },
-        { 
-            id: 14, categoria: 'iPhone', name: 'iPhone 17 Pro', 
-            descripcion: "Titanio de grado aeroespacial y el nuevo chip A19 Pro.",
-            price: 2085, imgDefault: 'imagenes/iphone17t.png', 
-            esIphone: true,
-            capacidades: [{lab:'256GB', extra:0}, {lab:'512GB', extra:214}, {lab:'1TB', extra:600}],
-            colores: ['Naranja Cosmico', 'Silver', 'Azul Profundo']
-        },
-        { 
-            id: 4, categoria: 'iPhone', name: 'iPhone 17', 
-            descripcion: "Potencia y elegancia en nuevos colores vibrantes.",
-            price: 1200, imgDefault: 'imagenes/iphone17todos.jpg', 
-            esIphone: true,
-            capacidades: [{lab:'128GB', extra:0}, {lab:'256GB', extra:300}],
-            colores: ['Lavanda', 'Salvia', 'Blanco', 'Azul niebla', 'Negro']
-        },
-        { 
-            id: 1, categoria: 'PC', name: 'RTX 4080 Super', 
-            descripcion: "Arquitectura Ada Lovelace para un ray tracing inigualable.",
-            price: 1250, imgDefault: 'imagenes/rtx4080.jpg', 
-            opciones: ['ASUS TUF Edition', 'MSI Suprim (+$120)']
-        },
-        { 
-            id: 2, categoria: 'Toner', name: 'Toner Canon 067H', 
-            descripcion: "Cartucho original de alta capacidad para impresiones láser a color.",
-            price: 65, imgDefault: 'imagenes/toner067hcanon.jpg', 
-            esCanon067h: true,
-            colores: ['Negro', 'Cian', 'Magenta', 'Amarillo', 'Pack completo (4 colores) (+$150)']
-        },
-        { 
-            id: 7, categoria: 'Accesorios de Pc', name: 'Mouse Pad', 
-            descripcion: "Almohadilla para raton ergonomico con gel.", 
-            price: 20, imgDefault: 'imagenes/mousepadnegro.webp', 
-            opciones: ['Estandar']
-        },
-        { 
-            id: 8, categoria: 'Accesorios de Pc', name: 'Bolso Samsonite', 
-            descripcion: "Comodidad y espacio para guardar laptop hasta de 16´.", 
-            price: 170, imgDefault: 'imagenes/bolsosamsonite.webp', 
-            opciones: ['Estandar']
-        },
-        { 
-            id: 9, categoria: 'Accesorios de iPhone', name: 'Cargador 20W USB-C', 
-            descripcion: "Cargador de 20W USB-C, ORIGINAL.", 
-            price: 25, imgDefault: 'imagenes/cargador20w.jpg', 
-            opciones: ['Estandar', 'Con cable de 1m USB-C (+$20)']
-        },
-        { 
-            id: 3, categoria: 'Perifericos', name: 'Mouse Logitech M550', 
-            descripcion: "Navegación inteligente con scroll de alta precisión.", 
-            price: 60, imgDefault: 'imagenes/mousem550.webp', 
-            opciones: ['Estandar', 'M550 L (+$15)']
-        },
-        { 
-            id: 5, categoria: 'Perifericos', name: 'Teclado Logitech K650', 
-            descripcion: "Teclado inalámbrico con reposamanos integrado.",
-            price: 120, imgDefault: 'imagenes/tecladok650.webp', 
-            opciones: ['Estandar']
-        },
-        { 
-            id: 6, categoria: 'PC', name: 'Laptop Lenovo Slim 3', 
-            descripcion: "Core I3 N305, 8gb ram, 512 gb ssd.",
-            price: 750, imgDefault: 'imagenes/laptoplenovo.webp', 
-            opciones: ['Estándar']
-        },
-        { 
-            id: 10, categoria: 'Toner', name: 'Toner HP 414x', 
-            descripcion: "Cartucho original para impresiones láser profesionales.",
-            price: 65, imgDefault: 'imagenes/toner414x.webp', 
-            esToner414x: true, 
-            colores: ['Negro', 'Cian', 'Magenta', 'Amarillo', 'Pack completo (negro, cian, magenta, amarillo) (+$100)']
-        },
-        { 
-            id: 11, categoria: 'Toner', name: 'Toner Canon 126H', 
-            descripcion: "Cartucho original para impresiones láser profesionales.",
-            price: 65, imgDefault: 'imagenes/toner126canon.webp', 
-            esToner414x: true, 
-            colores: ['Negro', 'Cian', 'Magenta', 'Amarillo', 'Pack completo (negro, cian, magenta, amarillo) (+$500)']
-        },
-        { 
-            id: 12, categoria: 'Accesorios de Pc', name: 'Base Targus para laptop', 
-            descripcion: "Cartucho original para impresiones láser profesionales.",
-            price: 65, imgDefault: 'imagenes/baselaptoptargus.jpg', 
-            opciones: ['Estandar']
-        },
-        { 
-            id: 13, categoria: 'Accesorios de iPhone', name: 'Cable de carga USB-C de 1m', 
-            descripcion: "Cable de carga USB-C de 60 W (1 m).",
-            price: 65, imgDefault: 'imagenes/cable1m.jpg', 
-            opciones: ['Estandar', 'Cargador y cable (+$50)']
-        },
-        { 
-            id: 15, categoria: 'PS5', name: 'PlayStation 5 Console 1-TB', 
-            descripcion: "La PlayStation 5 (PS5) redefine la inmersión gaming con tiempos de carga casi instantáneos gracias a su SSD de velocidad ultraalta, gráficos 4K impresionantes, trazado de rayos (ray tracing) y audio 3D inmersivo.", 
-            price: 650, imgDefault: 'imagenes/ps5.webp', 
-            opciones: ['Estandar']
-        },
-        { 
-            id: 16, categoria: 'PS5', name: 'Control PS5 DualSense Wireless', 
-            descripcion: "Redefine la inmersión con retroalimentación háptica, gatillos adaptativos dinámicos y un micrófono integrado. Con un diseño ergonómico, permite sentir acciones del juego, desde el retroceso de armas hasta el freno al conducir, facilitando compartir momentos con su botón crear.", 
-            price: 90, imgDefault: 'imagenes/controlps5.webp', 
-            opciones: ['Estandar']
-        },
+        { id: 0, categoria: 'iPhone', name: 'iPhone 17 Pro Max', descripcion: "Titanio de grado aeroespacial y el nuevo chip A19 Pro.", price: 2190, imgDefault: 'imagenes/iphone17t.png', esIphone: true, capacidades: [{lab:'256GB', extra:0}, {lab:'512GB', extra:300}, {lab:'1TB', extra:600}, {lab:'2TB', extra:1200}], colores: ['Naranja Cosmico', 'Silver', 'Azul Profundo']},
+        { id: 14, categoria: 'iPhone', name: 'iPhone 17 Pro', descripcion: "Titanio de grado aeroespacial y el nuevo chip A19 Pro.", price: 2085, imgDefault: 'imagenes/iphone17t.png', esIphone: true, capacidades: [{lab:'256GB', extra:0}, {lab:'512GB', extra:214}, {lab:'1TB', extra:600}], colores: ['Naranja Cosmico', 'Silver', 'Azul Profundo']},
+        { id: 4, categoria: 'iPhone', name: 'iPhone 17', descripcion: "Potencia y elegancia en nuevos colores vibrantes.", price: 1200, imgDefault: 'imagenes/iphone17todos.jpg', esIphone: true, capacidades: [{lab:'128GB', extra:0}, {lab:'256GB', extra:300}], colores: ['Lavanda', 'Salvia', 'Blanco', 'Azul niebla', 'Negro']},
+        { id: 1, categoria: 'PC', name: 'RTX 4080 Super', descripcion: "Arquitectura Ada Lovelace para un ray tracing inigualable.", price: 1250, imgDefault: 'imagenes/rtx4080.jpg', opciones: ['ASUS TUF Edition', 'MSI Suprim (+$120)']},
+        { id: 2, categoria: 'Toner', name: 'Toner Canon 067H', descripcion: "Cartucho original de alta capacidad para impresiones láser a color.", price: 65, imgDefault: 'imagenes/toner067hcanon.jpg', esCanon067h: true, colores: ['Negro', 'Cian', 'Magenta', 'Amarillo', 'Pack completo (4 colores) (+$150)']},
+        { id: 7, categoria: 'Accesorios de Pc', name: 'Mouse Pad', descripcion: "Almohadilla para raton ergonomico con gel.", price: 20, imgDefault: 'imagenes/mousepadnegro.webp', opciones: ['Estandar']},
+        { id: 8, categoria: 'Accesorios de Pc', name: 'Bolso Samsonite', descripcion: "Comodidad y espacio para guardar laptop hasta de 16´.", price: 170, imgDefault: 'imagenes/bolsosamsonite.webp', opciones: ['Estandar']},
+        { id: 9, categoria: 'Accesorios de iPhone', name: 'Cargador 20W USB-C', descripcion: "Cargador de 20W USB-C, ORIGINAL.", price: 25, imgDefault: 'imagenes/cargador20w.jpg', opciones: ['Estandar', 'Con cable de 1m USB-C (+$20)']},
+        { id: 3, categoria: 'Perifericos', name: 'Mouse Logitech M550', descripcion: "Navegación inteligente con scroll de alta precisión.", price: 60, imgDefault: 'imagenes/mousem550.webp', opciones: ['Estandar', 'M550 L (+$15)']},
+        { id: 5, categoria: 'Perifericos', name: 'Teclado Logitech K650', descripcion: "Teclado inalámbrico con reposamanos integrado.", price: 120, imgDefault: 'imagenes/tecladok650.webp', opciones: ['Estandar']},
+        { id: 6, categoria: 'PC', name: 'Laptop Lenovo Slim 3', descripcion: "Core I3 N305, 8gb ram, 512 gb ssd.", price: 750, imgDefault: 'imagenes/laptoplenovo.webp', opciones: ['Estándar']},
+        { id: 10, categoria: 'Toner', name: 'Toner HP 414x', descripcion: "Cartucho original para impresiones láser profesionales.", price: 65, imgDefault: 'imagenes/toner414x.webp', esToner414x: true, colores: ['Negro', 'Cian', 'Magenta', 'Amarillo', 'Pack completo (negro, cian, magenta, amarillo) (+$100)']},
+        { id: 11, categoria: 'Toner', name: 'Toner Canon 126H', descripcion: "Cartucho original para impresiones láser profesionales.", price: 65, imgDefault: 'imagenes/toner126canon.webp', esToner414x: true, colores: ['Negro', 'Cian', 'Magenta', 'Amarillo', 'Pack completo (negro, cian, magenta, amarillo) (+$500)']},
+        { id: 12, categoria: 'Accesorios de Pc', name: 'Base Targus para laptop', descripcion: "Base refrigerante para portátiles.", price: 65, imgDefault: 'imagenes/baselaptoptargus.jpg', opciones: ['Estandar']},
+        { id: 13, categoria: 'Accesorios de iPhone', name: 'Cable de carga USB-C de 1m', descripcion: "Cable de carga USB-C de 60 W (1 m).", price: 65, imgDefault: 'imagenes/cable1m.jpg', opciones: ['Estandar', 'Cargador y cable (+$50)']},
+        { id: 15, categoria: 'PS5', name: 'PlayStation 5 Console 1-TB', descripcion: "SSD de velocidad ultraalta y audio 3D inmersivo.", price: 650, imgDefault: 'imagenes/ps5.webp', opciones: ['Estandar']},
+        { id: 16, categoria: 'PS5', name: 'Control PS5 DualSense Wireless', descripcion: "Retroalimentación háptica y gatillos adaptativos.", price: 90, imgDefault: 'imagenes/controlps5.webp', opciones: ['Estandar']},
     ];
 
-    let carrito = JSON.parse(sessionStorage.getItem('fpt_cart')) || [];
+    let carrito = JSON.parse(localStorage.getItem('fpt_cart')) || [];
     let idActual = null;
 
-    function toggleAIChat() {
-        const win = document.getElementById('ai-window');
-        win.style.display = (win.style.display === 'flex') ? 'none' : 'flex';
-    }
-
-    function sendAIMessage() {
-        const input = document.getElementById('ai-input-field');
-        const container = document.getElementById('ai-msg-container');
-        const text = input.value.trim().toLowerCase();
-        if (!text) return;
-        container.innerHTML += `<div class="ai-msg ai-msg-user">${input.value}</div>`;
-        input.value = "";
-        let reply = "No estoy seguro de eso, pero puedes preguntarme por precios de iPhone o laptops.";
-        if (text.includes("hola")) reply = "¡Hola! ¿En qué equipo de tecnología estás interesado?";
-        else if (text.includes("iphone")) reply = "El iPhone 17 Pro Max es nuestra joya actual. Empieza en 1199$.";
-        setTimeout(() => {
-            container.innerHTML += `<div class="ai-msg ai-msg-bot">${reply}</div>`;
-            container.scrollTop = container.scrollHeight;
-        }, 600);
+    function irAlCarrito() {
+        document.getElementById('carrito-ancla').scrollIntoView({ behavior: 'smooth' });
     }
 
     window.onload = () => {
@@ -417,12 +292,12 @@
         }
         else {
             container.innerHTML += `<label class="selector-label">VERSIÓN</label>
-                <select id="selEstandar" class="modal-select" onchange="gestionarCambiosModal()">
-                    ${p.opciones.map(o => {
-                        let textLimpio = o.split(' (+$')[0];
-                        return `<option value="${o}">${textLimpio}</option>`;
-                    }).join('')}
-                </select>`;
+            <select id="selEstandar" class="modal-select" onchange="gestionarCambiosModal()">
+                ${p.opciones ? p.opciones.map(o => {
+                    let textLimpio = o.split(' (+$')[0];
+                    return `<option value="${o}">${textLimpio}</option>`;
+                }).join('') : '<option value="Estandar">Estandar</option>'}
+            </select>`;
         }
         
         gestionarCambiosModal();
@@ -486,13 +361,7 @@
             if (el) {
                 const opt = el.value;
                 if(opt.includes('+$')) total += parseInt(opt.split('+$')[1]);
-
-                if (opt.toLowerCase().includes('cable')) {
-                    if (p.name.includes('Cargador')) img.src = 'imagenes/cargadorycable.webp';
-                    else if (p.name.includes('Bolso')) img.src = 'imagenes/bolsoconcable.webp';
-                } else {
-                    img.src = p.imgDefault;
-                }
+                img.src = p.imgDefault;
             }
         }
         document.getElementById('modalPriceLabel').innerText = `${total.toLocaleString()} $`;
@@ -502,6 +371,15 @@
 
     function actualizarCarritoUI() {
         let totalVal = 0;
+        const cartBadge = document.getElementById('cart-badge');
+        
+        if (carrito.length > 0) {
+            cartBadge.innerText = carrito.length;
+            cartBadge.style.display = 'flex';
+        } else {
+            cartBadge.style.display = 'none';
+        }
+
         document.getElementById('cart-items').innerHTML = carrito.map((item, i) => {
             totalVal += item.subtotal;
             return `<div style="display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid #eee;">
@@ -609,4 +487,3 @@
 </script>
 </body>
 </html>
-
