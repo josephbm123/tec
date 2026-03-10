@@ -47,9 +47,24 @@
         .logo-img { height: 38px; border-radius: 6px; }
         .logo-text { font-weight: 600; font-size: 19px; letter-spacing: -0.5px; }
         
-        .search-container { background: rgba(0,0,0,0.05); padding: 5px 15px; border-radius: 12px; display: flex; align-items: center; }
+        .search-container { 
+            background: rgba(0,0,0,0.05); 
+            padding: 5px 15px; 
+            border-radius: 12px; 
+            display: flex; 
+            align-items: center; 
+            gap: 5px;
+        }
         .search-container input { border: none; background: transparent; outline: none; font-size: 13px; width: 140px; transition: 0.4s; }
         .search-container input:focus { width: 220px; }
+        .btn-clear-search {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-weight: bold;
+            display: none;
+        }
 
         /* --- MENÚ CATEGORÍAS --- */
         .category-menu {
@@ -134,6 +149,7 @@
     </div>
     <div class="search-container">
         <input type="text" id="buscador" placeholder="Buscar..." onkeyup="buscarProducto()">
+        <button id="btnClear" class="btn-clear-search" onclick="limpiarBuscador()">✕</button>
     </div>
 </nav>
 
@@ -240,15 +256,31 @@
     let carrito = JSON.parse(sessionStorage.getItem('fpt_cart')) || [];
     let idActual = null;
 
-    // --- FUNCIÓN DE BÚSQUEDA ---
+    function irAlInicio() { 
+        window.scrollTo({ top: 0, behavior: 'smooth' }); 
+        limpiarBuscador();
+        document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active'));
+        const todos = document.querySelector('.cat-item');
+        if(todos) todos.classList.add('active');
+    }
+
     function buscarProducto() {
         const input = document.getElementById('buscador');
+        const btnClear = document.getElementById('btnClear');
         const filtro = input.value.toLowerCase().trim();
+        btnClear.style.display = filtro.length > 0 ? 'inline' : 'none';
         const productosFiltrados = productos.filter(p => 
             p.name.toLowerCase().includes(filtro) || 
             p.categoria.toLowerCase().includes(filtro)
         );
         renderProducts(productosFiltrados);
+    }
+
+    function limpiarBuscador() {
+        const input = document.getElementById('buscador');
+        input.value = "";
+        document.getElementById('btnClear').style.display = 'none';
+        renderProducts(productos);
     }
 
     function renderProducts(lista) {
@@ -266,9 +298,6 @@
             </div>
         `).join('');
     }
-
-    function irAlInicio() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
-    function irAlCarrito() { document.getElementById('carrito-ancla').scrollIntoView({ behavior: 'smooth' }); }
 
     window.onload = () => {
         if (!localStorage.getItem('folio_fpt')) localStorage.setItem('folio_fpt', '1001');
@@ -320,7 +349,6 @@
         document.getElementById('modalAddBtn').onclick = () => {
             let finalPrice = p.price;
             let seleccionLab = "";
-            
             if (p.esIphone) {
                 const capSelect = document.getElementById('selCapacidad');
                 const color = document.getElementById('selColor').value;
@@ -339,7 +367,6 @@
                 if(optValue.includes('+$')) finalPrice += parseInt(optValue.split('+$')[1]);
                 seleccionLab = optSelect.options[optSelect.selectedIndex].text;
             }
-            
             carrito.push({ nombre: p.name, opcion: seleccionLab, subtotal: finalPrice });
             localStorage.setItem('fpt_cart', JSON.stringify(carrito));
             actualizarCarritoUI();
@@ -352,7 +379,6 @@
         const p = productos.find(x => x.id === idActual);
         const img = document.getElementById('modalImg');
         let total = p.price;
-
         if (p.esIphone) {
             total += parseInt(document.getElementById('selCapacidad').value);
             const color = document.getElementById('selColor').value.toLowerCase();
@@ -382,19 +408,34 @@
         document.getElementById('modalPriceLabel').innerText = `${total.toLocaleString()} $`;
     }
 
-    function cerrarModal() { document.getElementById('miModal').style.display = 'none'; }
+    // --- FUNCIÓN DE CERRAR ACTUALIZADA ---
+    function cerrarModal() { 
+        document.getElementById('miModal').style.display = 'none'; 
+    }
+
+    // EVENTO PARA CERRAR AL TOCAR AFUERA (ZONA EN BLANCO)
+    const modalGeneral = document.getElementById('miModal');
+    modalGeneral.addEventListener('click', (e) => {
+        // Si el clic es directamente en el fondo oscuro (miModal)
+        if (e.target === modalGeneral) {
+            cerrarModal();
+        }
+    });
+
+    // Opcional: Cerrar con la tecla Escape
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') cerrarModal();
+    });
 
     function actualizarCarritoUI() {
         let totalVal = 0;
         const cartBadge = document.getElementById('cart-badge');
-        
         if (carrito.length > 0) {
             cartBadge.innerText = carrito.length;
             cartBadge.style.display = 'flex';
         } else {
             cartBadge.style.display = 'none';
         }
-
         document.getElementById('cart-items').innerHTML = carrito.map((item, i) => {
             totalVal += item.subtotal;
             return `<div style="display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid #eee;">
@@ -410,6 +451,15 @@
         carrito.splice(i, 1); 
         localStorage.setItem('fpt_cart', JSON.stringify(carrito));
         actualizarCarritoUI(); 
+    }
+
+    function irAlCarrito() { document.getElementById('carrito-ancla').scrollIntoView({ behavior: 'smooth' }); }
+
+    function filtrarCategoria(cat, el) {
+        document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active'));
+        el.classList.add('active');
+        const filtrados = cat === 'Todos' ? productos : productos.filter(p => p.categoria === cat);
+        renderProducts(filtrados);
     }
 
     function enviarWhatsApp() {
