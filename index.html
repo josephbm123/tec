@@ -303,27 +303,19 @@
 
     let carrito = JSON.parse(sessionStorage.getItem('fpt_cart')) || [];
     let idActual = null;
-    let cantidadSeleccionada = 1; // AGREGADO
+    let cantidadSeleccionada = 1;
 
-    // --- FUNCIÓN DE BÚSQUEDA CORREGIDA ---
     function buscarProducto() {
         const input = document.getElementById('buscador');
         const btnClear = document.getElementById('btnClear');
         const filtro = input.value.toLowerCase().trim();
-        
         btnClear.style.display = filtro.length > 0 ? 'inline' : 'none';
-        
-        const filtrados = productos.filter(p => 
-            p.name.toLowerCase().includes(filtro) || 
-            p.categoria.toLowerCase().includes(filtro)
-        );
-        
+        const filtrados = productos.filter(p => p.name.toLowerCase().includes(filtro) || p.categoria.toLowerCase().includes(filtro));
         renderProducts(filtrados);
     }
 
     function limpiarBuscador() {
-        const input = document.getElementById('buscador');
-        input.value = "";
+        document.getElementById('buscador').value = "";
         document.getElementById('btnClear').style.display = 'none';
         renderProducts(productos);
     }
@@ -353,9 +345,8 @@
 
     function abrirModal(id) {
         idActual = id;
-        cantidadSeleccionada = 1; // AGREGADO: Reiniciar siempre a 1
-        document.getElementById('cantModal').innerText = 1; // AGREGADO
-
+        cantidadSeleccionada = 1;
+        document.getElementById('cantModal').innerText = 1;
         const p = productos.find(x => x.id === id);
         const container = document.getElementById('selectores-container');
         document.getElementById('modalTitle').innerText = p.name;
@@ -408,11 +399,9 @@
 
             const itemIndex = carrito.findIndex(i => i.nombre === p.name && i.opcion === seleccionLab);
             if(itemIndex > -1) {
-                // MODIFICADO: Sumar la cantidad elegida
                 carrito[itemIndex].cantidad += cantidadSeleccionada;
                 carrito[itemIndex].subtotal = carrito[itemIndex].cantidad * carrito[itemIndex].unitario;
             } else {
-                // MODIFICADO: Usar cantidadSeleccionada en lugar de 1
                 carrito.push({ nombre: p.name, opcion: seleccionLab, cantidad: cantidadSeleccionada, unitario: finalPrice, subtotal: finalPrice * cantidadSeleccionada });
             }
             guardarYActualizar();
@@ -421,7 +410,6 @@
         document.getElementById('miModal').style.display = 'flex';
     }
 
-    // AGREGADO: Función para controlar botones + y - en modal
     function cambiarCantModal(delta) {
         cantidadSeleccionada += delta;
         if (cantidadSeleccionada < 1) cantidadSeleccionada = 1;
@@ -438,6 +426,11 @@
             if (color.includes('naranja')) img.src = 'imagenes/iphone17n.jpg';
             else if (color.includes('silver')) img.src = 'imagenes/iphone17.jpg';
             else if (color.includes('azul profundo')) img.src = 'imagenes/iphone17a.jpg';
+            else if (color.includes('salvia')) img.src = 'imagenes/iphone17salvia.webp';
+            else if (color.includes('negro')) img.src = 'imagenes/iphone17negro.webp';
+            else if (color.includes('blanco')) img.src = 'imagenes/iphone17blanco.webp';
+            else if (color.includes('azul niebla')) img.src = 'imagenes/iphone17azulniebla.webp';
+            else if (color.includes('lavanda')) img.src = 'imagenes/iphone17lavanda.webp';
         } else {
             const el = document.getElementById('selColorToner') || document.getElementById('selEstandar');
             if(el && el.value.includes('+$')) total += parseInt(el.value.split('+$')[1]);
@@ -580,6 +573,15 @@
         localStorage.setItem('folio_fpt', parseInt(folio) + 1);
         document.getElementById('nro-cotizacion').innerText = localStorage.getItem('folio_fpt');
     }
+
+    // --- AGREGADO: CERRAR AL HACER CLIC FUERA ---
+    window.onclick = function(event) {
+        const modal = document.getElementById('miModal');
+        if (event.target == modal) {
+            cerrarModal();
+        }
+    }
 </script>
+
 </body>
 </html>
