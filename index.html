@@ -530,46 +530,87 @@
     function generarPDF() {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
-        const cliente = document.getElementById('inputCliente').value || "Valioso Cliente";
         const folio = localStorage.getItem('folio_fpt');
+        const cliente = document.getElementById('inputCliente').value || "Valioso Cliente";
         const fecha = new Date().toLocaleDateString();
 
-        doc.setFillColor(29, 29, 31);
-        doc.rect(0, 0, 210, 40, 'F');
-        doc.setTextColor(255, 255, 255);
-        doc.setFontSize(22);
-        doc.text("FullPrintTech", 20, 25);
-        doc.setFontSize(10);
-        doc.text(`COTIZACIÓN PROFORM #FPT-${folio}`, 140, 20);
-        doc.text(`Fecha: ${fecha}`, 140, 27);
+        // ============================================================
+        // 1. ESPACIO PARA TU LOGO (CAMBIA LA RUTA AQUÍ)
+        // ============================================================
+        const rutaDelLogo = "imagenes/logo.jpeg"; 
+        // ============================================================
 
-        doc.setTextColor(29, 29, 31);
-        doc.setFontSize(12);
-        doc.setFont(undefined, 'bold');
-        doc.text(`PARA: ${cliente.toUpperCase()}`, 20, 55);
-        
-        doc.autoTable({
-            startY: 65,
-            head: [['PRODUCTO', 'ESPECIFICACIÓN', 'SUBTOTAL']],
-            body: carrito.map(i => [i.nombre, i.opcion, `${i.subtotal.toLocaleString()} $`]),
-            headStyles: { fillColor: [0, 113, 227], textColor: 255 },
-            styles: { fontSize: 10, cellPadding: 5 },
-            columnStyles: { 2: { halign: 'right', fontStyle: 'bold' } }
-        });
+        const img = new Image();
+        img.src = rutaDelLogo;
 
-        const finalY = doc.lastAutoTable.finalY + 15;
-        doc.setFontSize(16);
-        doc.text(`TOTAL A PAGAR: ${document.getElementById('cart-total').innerText} $`, 120, finalY);
-        doc.save(`Cotizacion_FPT_${folio}.pdf`);
-        localStorage.setItem('folio_fpt', parseInt(folio) + 1);
-        document.getElementById('nro-cotizacion').innerText = localStorage.getItem('folio_fpt');
+        img.onload = function() {
+            try {
+                // Posición x: 15, y: 12, ancho: 35, alto: 22
+                doc.addImage(img, 'JPEG', 15, 12, 35, 22); 
+            } catch (e) {
+                console.warn("Ruta de imagen no encontrada. Mostrando respaldo.");
+                doc.setDrawColor(240);
+                doc.rect(15, 12, 35, 22);
+            }
+
+            // Datos empresa (Derecha)
+            doc.setFontSize(22);
+            doc.setTextColor(29, 29, 31);
+            doc.setFont("helvetica", "bold");
+            doc.text("FullPrintTech", 135, 22);
+            
+            doc.setFontSize(9);
+            doc.setFont("helvetica", "normal");
+            doc.setTextColor(100);
+            doc.text("Caracas, Venezuela", 135, 28);
+            doc.text("WhatsApp: +58 424-2333194", 135, 33);
+            doc.text("contacto@fullprinttech.com", 135, 38);
+
+            // Línea divisoria
+            doc.setDrawColor(0, 113, 227);
+            doc.setLineWidth(0.8);
+            doc.line(15, 48, 195, 48);
+
+            // Datos Cliente
+            doc.setFontSize(10);
+            doc.setTextColor(29, 29, 31);
+            doc.setFont("helvetica", "bold");
+            doc.text("COTIZACIÓN PARA:", 15, 58);
+            doc.setFont("helvetica", "normal");
+            doc.text(cliente.toUpperCase(), 15, 64);
+            
+            doc.setFont("helvetica", "bold");
+            doc.text("No. Cotización:", 135, 58);
+            doc.text("Fecha:", 135, 64);
+            doc.setFont("helvetica", "normal");
+            doc.text("#" + folio, 170, 58);
+            doc.text(fecha, 170, 64);
+
+            // Tabla
+            doc.autoTable({
+                startY: 75,
+                head: [['PRODUCTO', 'CONFIGURACIÓN', 'SUBTOTAL']],
+                body: carrito.map(i => [i.nombre, i.opcion, `${i.subtotal.toLocaleString()} $`]),
+                headStyles: { fillColor: [29, 29, 31] },
+                alternateRowStyles: { fillColor: [245, 245, 247] },
+                margin: { left: 15, right: 15 }
+            });
+
+            // Total
+            const finalY = doc.lastAutoTable.finalY + 15;
+            doc.setFontSize(14);
+            doc.setFont("helvetica", "bold");
+            doc.text(`TOTAL A PAGAR:  ${document.getElementById('cart-total').innerText} $`, 120, finalY);
+
+            doc.save(`Cotizacion_FPT_${folio}.pdf`);
+            localStorage.setItem('folio_fpt', parseInt(folio) + 1);
+            document.getElementById('nro-cotizacion').innerText = localStorage.getItem('folio_fpt');
+        };
+
+        img.onerror = function() { img.onload(); };
     }
 
-    function irAlInicio() {
-        document.getElementById('buscador').value = '';
-        filtrarCategoria('Todos', document.querySelector('.cat-item'));
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    function irAlInicio() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
     function filtrarCategoria(cat, element) {
         document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active'));
@@ -578,8 +619,8 @@
     }
 
     function buscarProducto() {
-        const query = document.getElementById('buscador').value.toLowerCase();
-        renderProducts(productos.filter(p => p.name.toLowerCase().includes(query)));
+        const q = document.getElementById('buscador').value.toLowerCase();
+        renderProducts(productos.filter(p => p.name.toLowerCase().includes(q)));
     }
 </script>
 </body>
