@@ -150,6 +150,7 @@
     <span class="cat-item" onclick="filtrarCategoria('Perifericos', this)">Periféricos</span>
     <span class="cat-item" onclick="filtrarCategoria('Accesorios de Pc', this)">Accesorios de Pc</span>
     <span class="cat-item" onclick="filtrarCategoria('Toner', this)">Toner</span>
+    <span class="cat-item" onclick="filtrarCategoria('PS5', this)">PS5</span>
     <a href="#contacto-seccion" class="cat-item" style="color:var(--accent-blue); font-weight:500;">Contacto</a>
 </div>
 
@@ -244,7 +245,7 @@
             descripcion: "Titanio de grado aeroespacial y el nuevo chip A19 Pro.",
             price: 2085, imgDefault: 'imagenes/iphone17t.png', 
             esIphone: true,
-            capacidades: [{lab:'256GB', extra:0}, {lab:'512GB', extra:300}, {lab:'1TB', extra:600}],
+            capacidades: [{lab:'256GB', extra:0}, {lab:'512GB', extra:214}, {lab:'1TB', extra:600}],
             colores: ['Naranja Cosmico', 'Silver', 'Azul Profundo']
         },
         { 
@@ -256,7 +257,7 @@
             colores: ['Lavanda', 'Salvia', 'Blanco', 'Azul niebla', 'Negro']
         },
         { 
-            id: 1, categoria: 'GPU', name: 'RTX 4080 Super', 
+            id: 1, categoria: 'PC', name: 'RTX 4080 Super', 
             descripcion: "Arquitectura Ada Lovelace para un ray tracing inigualable.",
             price: 1250, imgDefault: 'imagenes/rtx4080.jpg', 
             opciones: ['ASUS TUF Edition', 'MSI Suprim (+$120)']
@@ -264,7 +265,7 @@
         { 
             id: 2, categoria: 'Toner', name: 'Toner Canon 067H', 
             descripcion: "Cartucho original de alta capacidad para impresiones láser a color.",
-            price: 65, imgDefault: 'imagenes/toner067canon.jpg', 
+            price: 65, imgDefault: 'imagenes/toner067hcanon.jpg', 
             esCanon067h: true,
             colores: ['Negro', 'Cian', 'Magenta', 'Amarillo', 'Pack completo (4 colores) (+$150)']
         },
@@ -329,6 +330,18 @@
             descripcion: "Cable de carga USB-C de 60 W (1 m).",
             price: 65, imgDefault: 'imagenes/cable1m.jpg', 
             opciones: ['Estandar', 'Cargador y cable (+$50)']
+        },
+        { 
+            id: 15, categoria: 'PS5', name: 'PlayStation 5 Console 1-TB', 
+            descripcion: "La PlayStation 5 (PS5) redefine la inmersión gaming con tiempos de carga casi instantáneos gracias a su SSD de velocidad ultraalta, gráficos 4K impresionantes, trazado de rayos (ray tracing) y audio 3D inmersivo.", 
+            price: 650, imgDefault: 'imagenes/ps5.webp', 
+            opciones: ['Estandar']
+        },
+        { 
+            id: 16, categoria: 'PS5', name: 'Control PS5 DualSense Wireless', 
+            descripcion: "Redefine la inmersión con retroalimentación háptica, gatillos adaptativos dinámicos y un micrófono integrado. Con un diseño ergonómico, permite sentir acciones del juego, desde el retroceso de armas hasta el freno al conducir, facilitando compartir momentos con su botón crear.", 
+            price: 90, imgDefault: 'imagenes/controlps5.webp', 
+            opciones: ['Estandar']
         },
     ];
 
@@ -571,14 +584,3 @@
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
