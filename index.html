@@ -240,19 +240,24 @@
     let carrito = JSON.parse(sessionStorage.getItem('fpt_cart')) || [];
     let idActual = null;
 
-    function irAlCarrito() {
-        document.getElementById('carrito-ancla').scrollIntoView({ behavior: 'smooth' });
+    // --- FUNCIÓN DE BÚSQUEDA ---
+    function buscarProducto() {
+        const input = document.getElementById('buscador');
+        const filtro = input.value.toLowerCase().trim();
+        const productosFiltrados = productos.filter(p => 
+            p.name.toLowerCase().includes(filtro) || 
+            p.categoria.toLowerCase().includes(filtro)
+        );
+        renderProducts(productosFiltrados);
     }
 
-    window.onload = () => {
-        if (!localStorage.getItem('folio_fpt')) localStorage.setItem('folio_fpt', '1001');
-        document.getElementById('nro-cotizacion').innerText = localStorage.getItem('folio_fpt');
-        renderProducts(productos);
-        actualizarCarritoUI();
-    };
-
     function renderProducts(lista) {
-        document.getElementById('products-container').innerHTML = lista.map(p => `
+        const container = document.getElementById('products-container');
+        if (lista.length === 0) {
+            container.innerHTML = `<p style="grid-column: 1/-1; padding: 40px; color: var(--text-secondary);">No se encontraron productos.</p>`;
+            return;
+        }
+        container.innerHTML = lista.map(p => `
             <div class="card">
                 <img src="${p.imgDefault}" onclick="abrirModal(${p.id})">
                 <h3>${p.name}</h3>
@@ -261,6 +266,16 @@
             </div>
         `).join('');
     }
+
+    function irAlInicio() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    function irAlCarrito() { document.getElementById('carrito-ancla').scrollIntoView({ behavior: 'smooth' }); }
+
+    window.onload = () => {
+        if (!localStorage.getItem('folio_fpt')) localStorage.setItem('folio_fpt', '1001');
+        document.getElementById('nro-cotizacion').innerText = localStorage.getItem('folio_fpt');
+        renderProducts(productos);
+        actualizarCarritoUI();
+    };
 
     function abrirModal(id) {
         idActual = id;
@@ -487,4 +502,3 @@
 </script>
 </body>
 </html>
-
