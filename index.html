@@ -345,7 +345,7 @@
         },
     ];
 
-    let carrito = JSON.parse(localStorage.getItem('fpt_cart')) || [];
+    let carrito = JSON.parse(sessionStorage.getItem('fpt_cart')) || [];
     let idActual = null;
 
     function toggleAIChat() {
@@ -609,3 +609,4 @@
 </script>
 </body>
 </html>
+
