@@ -237,7 +237,7 @@
         { id: 16, categoria: 'PS5', name: 'Control PS5 DualSense Wireless', descripcion: "Retroalimentación háptica y gatillos adaptativos.", price: 90, imgDefault: 'imagenes/controlps5.webp', opciones: ['Estandar']},
     ];
 
-    let carrito = JSON.parse(localStorage.getItem('fpt_cart')) || [];
+    let carrito = JSON.parse(sessionStorage.getItem('fpt_cart')) || [];
     let idActual = null;
 
     function irAlCarrito() {
@@ -487,3 +487,4 @@
 </script>
 </body>
 </html>
+
