@@ -1,0 +1,19 @@
+{
+  "name": "tec",
+  "version": "1.0.0",
+  "description": "FullPrintTech - Tu tienda de tecnología de confianza",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"No tests configured\" && exit 0"
+  },
+  "keywords": [
+    "ecommerce",
+    "technology",
+    "fullprinttech"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@vercel/analytics": "^1.3.1"
+  }
+}
