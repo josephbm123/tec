@@ -7,8 +7,7 @@
     
     <link rel="icon" href="imagenes/logo.jpeg" type="image/jpeg">
     
-    <!-- Vercel Web Analytics -->
-    <script defer src="/_vercel/insights/script.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
@@ -24,12 +23,47 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
             background-color: var(--apple-white);
             color: var(--apple-black);
             scroll-behavior: smooth;
+            letter-spacing: -0.025em;
         }
+
+        h1, h2, h3, .logo-text {
+            font-weight: 800;
+            letter-spacing: -0.05em;
+        }
+
+        /* PRELOADER */
+        #preloader {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+            transition: opacity 1s ease, visibility 1s;
+        }
+
+        #preloader img {
+            width: 320px;
+            height: auto;
+            border-radius: 40px;
+            animation: pulseLogo 3s infinite ease-in-out;
+        }
+
+        @keyframes pulseLogo {
+            0% { transform: scale(0.96); opacity: 0.8; }
+            50% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0.96); opacity: 0.8; }
+        }
+
+        .loader-hidden { opacity: 0; visibility: hidden; }
 
         /* --- NAVEGACIÓN --- */
         nav {
@@ -69,7 +103,6 @@
             display: none;
         }
 
-        /* --- MENÚ CATEGORÍAS --- */
         .category-menu {
             position: fixed; top: 55px; width: 100%;
             background: rgba(245, 245, 247, 0.8); backdrop-filter: blur(20px);
@@ -80,7 +113,6 @@
         .cat-item { font-size: 12px; opacity: 0.7; cursor: pointer; text-decoration: none; color: inherit; white-space: nowrap; transition: 0.2s; }
         .cat-item.active { font-weight: 600; opacity: 1; border-bottom: 1.5px solid var(--accent-blue); }
 
-        /* --- CONTENIDO PRINCIPAL --- */
         .hero { padding-top: 160px; text-align: center; }
         .hero h1 { font-size: 48px; letter-spacing: -1.5px; margin-bottom: 10px; }
         
@@ -94,7 +126,6 @@
         .card img { width: 100%; height: 200px; object-fit: contain; cursor: pointer; margin-bottom: 15px; }
         .card h3 { margin: 10px 0 10px 0; font-size: 20px; }
         
-        /* --- CARRITO ESTILO --- */
         .cart-panel { background: white; padding: 30px; border-radius: 24px; border: 1px solid #eee; height: fit-content; position: sticky; top: 140px; }
         .input-cliente { width: 100%; padding: 14px; margin-bottom: 20px; border-radius: 12px; border: 1px solid #eee; background: var(--apple-gray); outline: none; }
 
@@ -122,7 +153,6 @@
         }
         .qty-number { font-weight: 600; font-size: 14px; min-width: 15px; text-align: center; }
 
-        /* --- BOTONES FLOTANTES --- */
         .floating-container {
             position: fixed; bottom: 30px; right: 30px;
             display: flex; flex-direction: column; gap: 15px; z-index: 5000;
@@ -146,7 +176,6 @@
             font-weight: bold; border: 2px solid white;
         }
 
-        /* --- SECCIÓN CONTACTO --- */
         .contact-section {
             background: var(--apple-gray); padding: 60px 10%;
             margin-top: 60px; text-align: center; border-radius: 40px 40px 0 0;
@@ -165,7 +194,6 @@
             font-size: 14px;
         }
 
-        /* --- MODAL --- */
         .modal { display: none; position: fixed; z-index: 4000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; }
         .modal-content { background: white; padding: 40px; border-radius: 30px; width: 90%; max-width: 420px; text-align: center; position: relative; }
         .modal-desc { font-size: 14px; color: var(--text-secondary); margin: 8px 0 20px 0; line-height: 1.5; }
@@ -178,6 +206,11 @@
     </style>
 </head>
 <body>
+
+<div id="preloader">
+    <img src="imagenes/logo.jpeg" alt="FullPrintTech">
+    <div style="color:black; font-size:24px; font-weight:800; margin-top:20px; font-family:'Inter';">FullPrintTech</div>
+</div>
 
 <nav>
     <div class="logo-container" onclick="irAlInicio()">
@@ -211,7 +244,7 @@
         </svg>
         <span id="cart-badge" class="cart-count-badge" style="display:none;">0</span>
     </button>
-    <a href="https://wa.me/+5811111111" target="_blank" class="floating-btn btn-wa-float" title="WhatsApp">
+    <a href="https://wa.me/584242333194" target="_blank" class="floating-btn btn-wa-float" title="WhatsApp">
         <svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.937 3.659 1.432 5.631 1.433h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
     </a>
 </div>
@@ -244,7 +277,7 @@
     <div class="contact-info-wrapper">
         <div class="contact-item">
             <span class="contact-label">WhatsApp</span>
-            <a href="https://wa.me/+5811111111" target="_blank" class="contact-link">+58 111111111</a>
+            <a href="https://wa.me/584242333194" target="_blank" class="contact-link">+58 424-2333194</a>
         </div>
         <div class="contact-item">
             <span class="contact-label">Correo Electrónico</span>
@@ -284,6 +317,11 @@
 </div>
 
 <script>
+    // CONTROL DE SCROLL AL CARGAR
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
+    window.onbeforeunload = () => window.scrollTo(0, 0);
+
     const productos = [
         { id: 0, categoria: 'iPhone', name: 'iPhone 17 Pro Max', descripcion: "Titanio de grado aeroespacial y el nuevo chip A19 Pro.", price: 2190, imgDefault: 'imagenes/iphone17t.png', esIphone: true, capacidades: [{lab:'256GB', extra:0}, {lab:'512GB', extra:300}, {lab:'1TB', extra:600}, {lab:'2TB', extra:1200}], colores: ['Naranja Cosmico', 'Silver', 'Azul Profundo']},
         { id: 14, categoria: 'iPhone', name: 'iPhone 17 Pro', descripcion: "Titanio de grado aeroespacial y el nuevo chip A19 Pro.", price: 2085, imgDefault: 'imagenes/iphone17t.png', esIphone: true, capacidades: [{lab:'256GB', extra:0}, {lab:'512GB', extra:214}, {lab:'1TB', extra:600}], colores: ['Naranja Cosmico', 'Silver', 'Azul Profundo']},
@@ -308,20 +346,19 @@
     let idActual = null;
     let cantidadSeleccionada = 1;
 
-    function buscarProducto() {
-        const input = document.getElementById('buscador');
-        const btnClear = document.getElementById('btnClear');
-        const filtro = input.value.toLowerCase().trim();
-        btnClear.style.display = filtro.length > 0 ? 'inline' : 'none';
-        const filtrados = productos.filter(p => p.name.toLowerCase().includes(filtro) || p.categoria.toLowerCase().includes(filtro));
-        renderProducts(filtrados);
-    }
-
-    function limpiarBuscador() {
-        document.getElementById('buscador').value = "";
-        document.getElementById('btnClear').style.display = 'none';
+    /* CARGA INICIAL UNIFICADA */
+    window.onload = () => {
+        window.scrollTo(0, 0); // Refuerzo de scroll arriba
+        if (!localStorage.getItem('folio_fpt')) localStorage.setItem('folio_fpt', '1001');
+        document.getElementById('nro-cotizacion').innerText = localStorage.getItem('folio_fpt');
         renderProducts(productos);
-    }
+        actualizarCarritoUI();
+
+        const loader = document.getElementById("preloader");
+        setTimeout(() => {
+            loader.classList.add("loader-hidden");
+        }, 2000); 
+    };
 
     function renderProducts(lista) {
         const container = document.getElementById('products-container');
@@ -339,12 +376,20 @@
         `).join('');
     }
 
-    window.onload = () => {
-        if (!localStorage.getItem('folio_fpt')) localStorage.setItem('folio_fpt', '1001');
-        document.getElementById('nro-cotizacion').innerText = localStorage.getItem('folio_fpt');
+    function buscarProducto() {
+        const input = document.getElementById('buscador');
+        const btnClear = document.getElementById('btnClear');
+        const filtro = input.value.toLowerCase().trim();
+        btnClear.style.display = filtro.length > 0 ? 'inline' : 'none';
+        const filtrados = productos.filter(p => p.name.toLowerCase().includes(filtro) || p.categoria.toLowerCase().includes(filtro));
+        renderProducts(filtrados);
+    }
+
+    function limpiarBuscador() {
+        document.getElementById('buscador').value = "";
+        document.getElementById('btnClear').style.display = 'none';
         renderProducts(productos);
-        actualizarCarritoUI();
-    };
+    }
 
     function abrirModal(id) {
         idActual = id;
@@ -494,7 +539,7 @@
         let msg = `🛒 *COTIZACIÓN FullPrintTech - ${cliente}*%0A%0A`;
         carrito.forEach(i => msg += `• ${i.nombre} x${i.cantidad} (${i.opcion}) - ${i.subtotal}$%0A`);
         msg += `%0A*TOTAL: ${document.getElementById('cart-total').innerText}$*`;
-        window.open(`https://wa.me/5842411111111?text=${msg}`);
+        window.open(`https://wa.me/584242333194?text=${msg}`);
     }
 
      function generarPDF() {
@@ -588,6 +633,3 @@
 
 </body>
 </html>
-
-
-
